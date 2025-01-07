@@ -1,0 +1,653 @@
+diff --git a/nv-soc/tegra234-soc-camera.dtsi b/nv-soc/tegra234-soc-camera.dtsi
+index 52cbe51..04a0666 100644
+--- a/nv-soc/tegra234-soc-camera.dtsi
++++ b/nv-soc/tegra234-soc-camera.dtsi
+@@ -28,7 +28,7 @@
+ 				iommus = <&smmu_iso TEGRA234_SID_ISO_VI>;
+ 				interconnects = <&mc TEGRA234_MEMORY_CLIENT_VIW &emc>;
+ 				interconnect-names = "write";
+-				non-coherent;
++                dma-noncoherent;
+ 				status = "okay";
+ 			};
+ 
+@@ -52,7 +52,7 @@
+ 				iommus = <&smmu_iso TEGRA234_SID_ISO_VI2>;
+ 				interconnects = <&mc TEGRA234_MEMORY_CLIENT_VI2W &emc>;
+ 				interconnect-names = "write";
+-				non-coherent;
++                dma-noncoherent;
+ 				status = "okay";
+ 			};
+ 
+@@ -63,6 +63,7 @@
+ 				interconnects = <&mc TEGRA234_MEMORY_CLIENT_VIFALR &emc>,
+ 						<&mc TEGRA234_MEMORY_CLIENT_VIFALW &emc>;
+ 				interconnect-names = "dma-mem", "write";
++                dma-noncoherent;
+ 				status = "okay";
+ 			};
+ 
+@@ -78,7 +79,7 @@
+ 				nvidia,isp-falcon-device = <&isp_thi>;
+ 
+ 				iommus = <&smmu_niso1 TEGRA234_SID_ISP>;
+-				dma-coherent;
++				dma-noncoherent;
+ 				status = "okay";
+ 			};
+ 
+diff --git a/overlay/Makefile b/overlay/Makefile
+index c88bbe2..563a25f 100644
+--- a/overlay/Makefile
++++ b/overlay/Makefile
+@@ -52,6 +52,7 @@ dtbo-y += tegra234-p3767-camera-p3768-imx477-dual-4lane.dtbo
+ dtbo-y += tegra234-p3767-camera-p3768-imx477-imx219.dtbo
+ dtbo-y += tegra234-p3737-camera-eCAM130A-overlay.dtbo
+ dtbo-y += tegra234-p3737-camera-dual-hawk-ar0234-e3653-overlay.dtbo
++dtbo-y += tegra234-p3737-camera-ar0233-ad-cam-26-overlay.dtbo
+ dtbo-y += tegra234-p3737-camera-imx390-overlay.dtbo
+ dtbo-y += tegra234-p3737-camera-p3762-a00-overlay.dtbo
+ dtbo-y += tegra234-p3740-camera-p3783-a00-overlay.dtbo
+diff --git a/overlay/tegra234-camera-ar0234-a00.dtsi b/overlay/tegra234-camera-ar0234-a00.dtsi
+index e744dd2..8383292 100644
+--- a/overlay/tegra234-camera-ar0234-a00.dtsi
++++ b/overlay/tegra234-camera-ar0234-a00.dtsi
+@@ -1,6 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ // SPDX-FileCopyrightText: Copyright (c) 2018-2023, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+-
+ / {
+ 	fragment-camera@0 {
+ 		target-path = "/";
+diff --git a/overlay/tegra234-p3737-camera-ar0233-ad-cam-26-overlay.dts b/overlay/tegra234-p3737-camera-ar0233-ad-cam-26-overlay.dts
+new file mode 100644
+index 0000000..5c2032a
+--- /dev/null
++++ b/overlay/tegra234-p3737-camera-ar0233-ad-cam-26-overlay.dts
+@@ -0,0 +1,244 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// SPDX-FileCopyrightText: Copyright (c) 2018-2024, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/clock/tegra234-clock.h>
++#include <dt-bindings/gpio/tegra234-gpio.h>
++#include <dt-bindings/tegra234-p3737-0000+p3701-0000.h>
++
++#define CAM0_RST_L	TEGRA234_MAIN_GPIO(H, 3)
++#define CAM0_PWDN	TEGRA234_MAIN_GPIO(H, 6)
++#define CAM1_RST_L	TEGRA234_MAIN_GPIO(AC, 1)
++#define CAM1_PWDN	TEGRA234_MAIN_GPIO(AC, 0)
++#define PWR_EN		TEGRA234_MAIN_GPIO(AC, 7)
++#define GYRO1_IRQ_GPIO	TEGRA234_AON_GPIO(BB, 1)
++#define ACCE1_IRQ_GPIO	TEGRA234_AON_GPIO(BB, 0)
++
++/* camera control gpio definitions */
++/ {
++	overlay-name = "Jetson Camera AD-CAM-26 module";
++	jetson-header-name = "Jetson AGX CSI Connector";
++	compatible = JETSON_COMPATIBLE;
++	
++	fragment@0 {
++		target-path = "/";
++		__overlay__ {
++			tegra-capture-vi {
++				num-channels = <1>;
++				 ports {
++					status = "okay";
++					vi_port0: port@0 {
++                        reg = <0>;
++						status = "okay";
++						ar0233_vi_in0: endpoint {
++							status = "okay";
++							vc-id = <0>;
++							port-index = <0>;
++							bus-width = <4>;
++							remote-endpoint = <&ar0233_csi_out0>;
++						};
++					};
++				};
++			};
++            tegra-camera-platform {
++                // num_csi_lanes = <4>;
++				// max_lane_speed = <166666667>;
++				// min_bits_per_pixel = <12>;
++				// vi_peak_byte_per_pixel = <12>;
++				// vi_bw_margin_pct = <25>;
++				// max_pixel_rate = <800000>;
++				// isp_peak_byte_per_pixel = <2>;
++				// isp_bw_margin_pct = <25>;
++
++				modules {
++					status = "okay";
++					module0 {
++						badge = "ar0233_rear_p1";
++						position = "rear";
++						orientation = "1";
++						status = "okay";
++						drivernode0 {
++							status = "okay";
++                            //devname = "ar0233 8-0012";
++							/* Declare PCL support driver (classically known as guid) */
++							pcl_id = "v4l2_sensor";
++							/* Declare the device-tree hierarchy to driver instance */
++							sysfs-device-tree = "/sys/firmware/devicetree/base/bus@0/i2c@31e0000/ar0233_a@10";
++						};
++					};
++				};
++			};
++
++			bus@0{
++                status = "okay";
++				host1x@13e00000 {
++                    status = "okay";
++					nvcsi@15a00000 {
++                        status = "okay";
++						num-channels = <1>;
++						csi_chan0:channel@0 {
++                            reg = <0>;
++							status = "okay";
++							ports {
++								status = "okay";
++								csi_chan0_port0: port@0 {
++                                    reg = <0>;
++									status = "okay";
++									ar0233_csi_in0: endpoint@0 {
++										status = "okay";
++										port-index = <0>;
++										bus-width = <4>;
++										remote-endpoint = <&ar0233_out0>;
++									};
++								};
++								csi_chan0_port1: port@1 {
++                                    reg = <1>;
++									status = "okay";
++									ar0233_csi_out0: endpoint@1 {
++										status = "okay";
++										remote-endpoint = <&ar0233_vi_in0>;
++									};
++								};
++							};
++						};
++					};
++				};
++				
++				i2c@31e0000 {
++					
++					single_max96712_a@11 {
++						status = "okay";
++						compatible = "nvidia,max96712";
++						reg = <0x11>;
++						channel = "a";
++					};
++					
++
++					ar0234_a@12 {
++						status = "disabled";
++                    };
++                    
++					ar0233_a@10 {
++						status = "okay";
++						compatible = "onsemi,ar0233";
++						reg = <0x10>;
++						physical_w = "15.0";
++						physical_h = "12.5";
++						sensor_model ="ar0233";
++						sync_sensor = "HAWK1";
++						sync_sensor_index = <1>;
++						supports-alt-exp = "false";
++						post_crop_frame_drop = "0";
++						use_sensor_mode_id = "false";
++						/* Define any required hw resources needed by driver */
++						/* ie. clocks, io pins, power sources */
++						clocks = <&bpmp TEGRA234_CLK_EXTPERIPH1>,
++						<&bpmp TEGRA234_CLK_EXTPERIPH1>;
++						clock-names = "extperiph1", "pllp_grtba";
++						mclk = "extperiph1";
++						channel = "a";
++						//has-eeprom;
++						reset-gpios = <&gpio CAM1_RST_L GPIO_ACTIVE_HIGH>;
++						pwdn-gpios = <&gpio CAM0_PWDN GPIO_ACTIVE_HIGH>;
++						pwr-gpios = <&gpio PWR_EN GPIO_ACTIVE_HIGH>;
++						
++						mode0 {/*mode IMX424_MODE_3840X1080_CROP_30FPS*/
++                            //lane_polarity = "6";
++							mclk_khz = "24000";
++							num_lanes = "4";
++							tegra_sinterface = "serial_a";
++							phy_mode = "DPHY";
++							vc_id = "0";
++							discontinuous_clk = "no";
++							dpcm_enable = "false";
++							cil_settletime = "0";
++							dynamic_pixel_bit_depth = "12";
++							csi_pixel_bit_depth = "12";
++							mode_type = "bayer";
++							pixel_phase = "rggb";
++							
++							active_w = "1920";
++							active_h = "1080";
++							readout_orientation = "0";
++							line_length = "2048";
++							inherent_gain = "1";
++							pix_clk_hz = "166666667";
++							serdes_pix_clk_hz = "166666667";
++							
++							gain_factor = "100";
++							min_gain_val = "100"; /* dB */
++							max_gain_val = "1600"; /* dB */
++							step_gain_val = "1"; /* 0.1 */
++							default_gain = "100";
++							min_hdr_ratio = "1";
++							max_hdr_ratio = "1";
++							framerate_factor = "1000000";
++							min_framerate = "30000000";
++							max_framerate = "30000000";
++							step_framerate = "30000000";
++							default_framerate = "30000000";
++							exposure_factor = "1000000";
++							min_exp_time = "28"; /*us, 2 lines*/
++							max_exp_time = "22000";
++							step_exp_time = "1";
++							default_exp_time = "22000";/* us */
++							embedded_metadata_height = "0";
++						 };
++						
++						ports {
++                            status = "okay";
++							port@0 {    
++                                status = "okay";
++                                reg = <0>;  
++								ar0233_out0: endpoint {
++                                    status = "okay";
++									vc-id = <0>;
++									port-index = <0>;
++									bus-width = <4>;
++									remote-endpoint = <&ar0233_csi_in0>;
++								};
++							};
++						};
++					};
++					
++				};
++				
++				i2c@c240000 {
++                    dual_hawk_a@18 {
++                        status = "disabled";
++						//compatible = "onsemi,ar0233";
++                    };
++
++					bmi088_a@68 {
++						status = "okay";
++						compatible = "bmi,bmi088";
++						reg = <0x68>;
++						accel_i2c_addr = <0x18>;
++						/* Old BMI088 driver uses *_gpio property and the latest
++						* BMI088 driver uses *-gpios property. Have both versions
++						* to maintain backward compatibility.
++						*/
++						accel_irq_gpio = <&gpio_aon ACCE1_IRQ_GPIO GPIO_ACTIVE_HIGH>;
++						gyro_irq_gpio = <&gpio_aon GYRO1_IRQ_GPIO GPIO_ACTIVE_HIGH>;
++						accel_irq-gpios = <&gpio_aon ACCE1_IRQ_GPIO GPIO_ACTIVE_HIGH>;
++						gyro_irq-gpios = <&gpio_aon GYRO1_IRQ_GPIO GPIO_ACTIVE_HIGH>;
++						accel_matrix = [01 00 00 00 01 00 00 00 01];
++						gyro_matrix = [01 00 00 00 01 00 00 00 01];
++						gyro_reg_0x18 = <0x81>;
++						timestamps = <&hte_aon ACCE1_IRQ_GPIO>, <&hte_aon GYRO1_IRQ_GPIO>;
++						timestamp-names = "accelerometer", "gyroscope";
++					};
++					
++				};
++			};
++			nvpps {
++				status = "disabled";
++				compatible = "nvidia,tegra194-nvpps";
++				interface = "eth0";
++				sec_interface = "eth0";
++			};
++		};
++	};
++};
+diff --git a/overlay/tegra234-p3737-camera-modules.dtsi b/overlay/tegra234-p3737-camera-modules.dtsi
+index d478028..c5bee98 100644
+--- a/overlay/tegra234-p3737-camera-modules.dtsi
++++ b/overlay/tegra234-p3737-camera-modules.dtsi
+@@ -1,12 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ // SPDX-FileCopyrightText: Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ 
+-#include "tegra234-camera-e3331-a00.dtsi"
+-#include "tegra234-camera-e3333-a00.dtsi"
+-#include "tegra234-camera-imx390-a00.dtsi"
+-#include "tegra234-camera-ar0234-a00.dtsi"
+-#include "tegra234-p3737-0000-camera-imx185-a00.dtsi"
+-#include "tegra234-p3737-0000-camera-imx274-dual.dtsi"
++// #include "tegra234-camera-e3331-a00.dtsi"
++// #include "tegra234-camera-e3333-a00.dtsi"
++// #include "tegra234-camera-imx390-a00.dtsi"
++// #include "tegra234-camera-ar0234-a00.dtsi"
++// #include "tegra234-p3737-0000-camera-imx185-a00.dtsi"
++// #include "tegra234-p3737-0000-camera-imx274-dual.dtsi"
+ 
+ #define CAM0_RST_L	TEGRA234_MAIN_GPIO(H, 3)
+ #define CAM0_PWDN	TEGRA234_MAIN_GPIO(H, 6)
+@@ -27,41 +27,6 @@
+ 							status = "disabled";
+ 						};
+ 					};
+-					vi_port1: port@1 {
+-						status = "disabled";
+-						vi_in1: endpoint {
+-							vc-id = <0>;
+-							status = "disabled";
+-						};
+-					};
+-					vi_port2: port@2 {
+-						status = "disabled";
+-						vi_in2: endpoint {
+-							vc-id = <0>;
+-							status = "disabled";
+-						};
+-					};
+-					vi_port3: port@3 {
+-						status = "disabled";
+-						vi_in3: endpoint {
+-							vc-id = <0>;
+-							status = "disabled";
+-						};
+-					};
+-					vi_port4: port@4 {
+-						status = "disabled";
+-						vi_in4: endpoint {
+-							vc-id = <0>;
+-							status = "disabled";
+-						};
+-					};
+-					vi_port5: port@5 {
+-						status = "disabled";
+-						vi_in5: endpoint {
+-							vc-id = <0>;
+-							status = "disabled";
+-						};
+-					};
+ 				};
+ 			};
+ 
+@@ -81,60 +46,6 @@
+ 						cam_module0_drivernode0: drivernode0 {
+ 							status = "disabled";
+ 						};
+-						cam_module0_drivernode1: drivernode1 {
+-							status = "disabled";
+-							pcl_id = "v4l2_lens";
+-						};
+-					};
+-					cam_module1: module1 {
+-						status = "disabled";
+-						cam_module1_drivernode0: drivernode0 {
+-							status = "disabled";
+-						};
+-						cam_module1_drivernode1: drivernode1 {
+-							status = "disabled";
+-							pcl_id = "v4l2_lens";
+-						};
+-					};
+-					cam_module2: module2 {
+-						status = "disabled";
+-						cam_module2_drivernode0: drivernode0 {
+-							status = "disabled";
+-						};
+-						cam_module2_drivernode1: drivernode1 {
+-							status = "disabled";
+-							pcl_id = "v4l2_lens";
+-						};
+-					};
+-					cam_module3: module3 {
+-						status = "disabled";
+-						cam_module3_drivernode0: drivernode0 {
+-							status = "disabled";
+-						};
+-						cam_module3_drivernode1: drivernode1 {
+-							status = "disabled";
+-							pcl_id = "v4l2_lens";
+-						};
+-					};
+-					cam_module4: module4 {
+-						status = "disabled";
+-						cam_module4_drivernode0: drivernode0 {
+-							status = "disabled";
+-						};
+-						cam_module4_drivernode1: drivernode1 {
+-							status = "disabled";
+-							pcl_id = "v4l2_lens";
+-						};
+-					};
+-					cam_module5: module5 {
+-						status = "disabled";
+-						cam_module5_drivernode0: drivernode0 {
+-							status = "disabled";
+-						};
+-						cam_module5_drivernode1: drivernode1 {
+-							status = "disabled";
+-							pcl_id = "v4l2_lens";
+-						};
+ 					};
+ 				};
+ 			};
+@@ -172,208 +83,15 @@
+ 								};
+ 							};
+ 						};
+-						csi_chan1: channel@1 {
+-							status = "disabled";
+-							ports {
+-								csi_chan1_port0: port@0 {
+-									status = "disabled";
+-									csi_in1: endpoint@2 {
+-										status = "disabled";
+-									};
+-								};
+-								csi_chan1_port1: port@1 {
+-									status = "disabled";
+-									csi_out1: endpoint@3 {
+-										status = "disabled";
+-									};
+-								};
+-							};
+-						};
+-						csi_chan2: channel@2 {
+-							status = "disabled";
+-							ports {
+-								csi_chan2_port0: port@0 {
+-									status = "disabled";
+-									csi_in2: endpoint@4 {
+-										status = "disabled";
+-									};
+-								};
+-								csi_chan2_port1: port@1 {
+-									status = "disabled";
+-									csi_out2: endpoint@5 {
+-										status = "disabled";
+-									};
+-								};
+-							};
+-						};
+-						csi_chan3: channel@3 {
+-							status = "disabled";
+-							ports {
+-								csi_chan3_port0: port@0 {
+-									status = "disabled";
+-									csi_in3: endpoint@6 {
+-										status = "disabled";
+-									};
+-								};
+-								csi_chan3_port1: port@1 {
+-									status = "disabled";
+-									csi_out3: endpoint@7 {
+-										status = "disabled";
+-									};
+-								};
+-							};
+-						};
+-						csi_chan4: channel@4 {
+-							status = "disabled";
+-							ports {
+-								csi_chan4_port0: port@0 {
+-									status = "disabled";
+-									csi_in4: endpoint@8 {
+-										status = "disabled";
+-									};
+-								};
+-								csi_chan4_port1: port@1 {
+-									status = "disabled";
+-									csi_out4: endpoint@9 {
+-										status = "disabled";
+-									};
+-								};
+-							};
+-						};
+-						csi_chan5: channel@5 {
+-							status = "disabled";
+-							ports {
+-								csi_chan5_port0: port@0 {
+-									status = "disabled";
+-									csi_in5: endpoint@10 {
+-										status = "disabled";
+-									};
+-								};
+-								csi_chan5_port1: port@1 {
+-									status = "disabled";
+-									csi_out5: endpoint@11 {
+-										status = "disabled";
+-									};
+-								};
+-							};
+-						};
+ 					};
+ 				};
+-				i2c@3180000 {
+-					tca6408@21 {
++				i2c@31e0000 {
++					single_max96712_a@11 {
+ 						status = "disabled";
+-					};
+-					tca9548@77 {
+-						status = "disabled";
+-						i2c@0 {
+-							ov5693_a@36 {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@1 {
+-							ov5693_b@36 {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@2 {
+-							ov5693_c@36 {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@3 {
+-							ov5693_d@36 {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@4 {
+-							ov5693_e@36 {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@5 {
+-							ov5693_g@36 {
+-								status = "disabled";
+-							};
+-						};
+-					};
+-					tca9548@70 {
+-						status = "disabled";
+-						i2c@0 {
+-							ar1335_a@42 {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@2 {
+-							ar1335_c@42 {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@4 {
+-							ar1335_e@42 {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@5 {
+-							ar1335_g@42 {
+-								status = "disabled";
+-							};
+-						};
+-					};
+-					tca9546@70 {
+-						status = "disabled";
+-						i2c@0 {
+-							dual_hawk0: dual_hawk_a@18 {
+-								status = "disabled";
+-							};
+-							dual_hawk1: dual_hawk_b@10 {
+-								status = "disabled";
+-							};
+-							max96712_dser: single_max96712_a@62 {
+-								status = "disabled";
+-							};
+-							pca9570_a@24 {
+-								status = "disabled";
+-							};
+-							imx274_a@1a {
+-								status = "disabled";
+-							};
+-							imx185_a@1a {
+-								status = "disabled";
+-							};
+-							imx318_a@10 {
+-								status = "disabled";
+-							};
+-							max9296@48 {
+-								status = "disabled";
+-							};
+-							max9295_prim@62 {
+-								status = "disabled";
+-							};
+-							max9295_a@40 {
+-								status = "disabled";
+-							};
+-							max9295_b@60 {
+-								status = "disabled";
+-							};
+-							imx390_a@1b {
+-								status = "disabled";
+-							};
+-							imx390_b@1c {
+-								status = "disabled";
+-							};
+-						};
+-						i2c@1 {
+-							dual_hawk2: dual_hawk_c@18 {
+-								status = "disabled";
+-							};
+-							dual_hawk3: dual_hawk_d@10 {
+-								status = "disabled";
+-							};
+-							imx274_c@1a {
+-								status = "disabled";
+-							};
+-						};
+-					};
++                    };
++                    ar0234_a@12 {
++                        status = "disabled";
++                    };
+ 				};
+ 			};
+ 		};

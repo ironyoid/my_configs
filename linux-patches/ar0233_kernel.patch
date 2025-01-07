@@ -1,0 +1,47 @@
+diff --git a/drivers/of/address.c b/drivers/of/address.c
+index 4b0c036ec747..8cf8fdb84aed 100644
+--- a/drivers/of/address.c
++++ b/drivers/of/address.c
+@@ -1098,24 +1098,25 @@ phys_addr_t __init of_dma_get_max_cpu_address(struct device_node *np)
+  * default for OF devices on the current platform.
+  */
+ bool of_dma_is_coherent(struct device_node *np)
+-{
+-	struct device_node *node;
+-
+-	if (IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT))
+-		return true;
+-
+-	node = of_node_get(np);
+-
+-	while (node) {
+-		if (of_property_read_bool(node, "dma-coherent")) {
+-			of_node_put(node);
+-			return true;
++ {
++ 	struct device_node *node;
++	bool is_coherent = IS_ENABLED(CONFIG_OF_DMA_DEFAULT_COHERENT);
++ 	node = of_node_get(np);
++ 
++ 	while (node) {
++ 		if (of_property_read_bool(node, "dma-coherent")) {
++			is_coherent = true;
++			break;
+ 		}
+-		node = of_get_next_dma_parent(node);
+-	}
+-	of_node_put(node);
+-	return false;
+-}
++		if (of_property_read_bool(node, "dma-noncoherent")) {
++			is_coherent = false;
++			break;
++ 		}
++ 		node = of_get_next_dma_parent(node);
++ 	}
++ 	of_node_put(node);
++	return is_coherent;
++ }
+ EXPORT_SYMBOL_GPL(of_dma_is_coherent);
+ 
+ /**
