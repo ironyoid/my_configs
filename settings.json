@@ -1,0 +1,27 @@
+{
+    "files.associations": {
+        "*.txx": "cpp",
+        "thread": "cpp"
+    },
+    "cmake.configureOnOpen": false,
+    "editor.formatOnSave": true,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.path": "/home/nikitapichugin/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/18.1.3/clangd_18.1.3/bin/clangd",
+    "clangd.arguments": [
+        "-log=info",
+        "-pretty",
+        "--background-index",
+        //"--query-driver=/bin/arm-buildroot-linux-gnueabihf-g++", //for cross compile usage
+        "--compile-commands-dir=/ros2_ws/build"
+    ],
+    "codechecker.backend.compilationDatabasePath": "/ros2_ws/build/compile_commands.json",
+    "clang-tidy.buildPath": "/ros2_ws/build",
+    "clang-tidy.compilerArgs": [
+        "-std=c++17",
+    ],
+    "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/compile_commands.json",
+    "sonarlint.connectedMode.project": {
+        "connectionId": "http-172-16-170-7-9000-",
+        "projectKey": "myFirstProject"
+    }
+}
