@@ -1,0 +1,16 @@
+{{- $chassis := promptStringOnce . "chassis" "Chassis (laptop|desktop)" "desktop" -}}
+{{- $wm := promptStringOnce . "wm" "Window manager (i3|sway)" "i3" -}}
+{{- $gpu := promptStringOnce . "gpu" "GPU vendor (amd|nvidia|intel)" "amd" -}}
+{{- $ucode := promptStringOnce . "microcode" "CPU microcode (amd|intel|none)" "amd" -}}
+{{- $ru := promptBoolOnce . "ru_layout" "Enable RU keyboard layout" false -}}
+[data]
+    chassis    = "{{ $chassis }}"
+    wm         = "{{ $wm }}"
+    gpu        = "{{ $gpu }}"
+    microcode  = "{{ $ucode }}"
+    ru_layout  = {{ $ru }}
+    laptop     = {{ eq $chassis "laptop" }}
+    wayland    = {{ eq $wm "sway" }}
+[data.user]
+    email = "pichuginna96@gmail.com"
+    name  = "Nikita Pichugin"

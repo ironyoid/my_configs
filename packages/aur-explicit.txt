@@ -1,0 +1,13 @@
+betterlockscreen
+downgrade
+execstack
+hiddify
+openvpn-update-resolv-conf-git
+openvpn-update-systemd-resolved
+python312
+rar
+sing-box-bin
+visual-studio-code-bin
+xkb-switch-git
+yay
+yay-debug

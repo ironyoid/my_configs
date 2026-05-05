@@ -1,0 +1,27 @@
+{{- /* Skip the X11/i3 stack on Wayland/sway machines */}}
+{{ if ne .wm "i3" }}
+.config/i3
+.config/polybar
+.config/picom
+.config/rofi
+.config/betterlockscreen
+i3-related
+{{ end }}
+
+{{- /* Skip the Wayland/sway stack on i3 machines */}}
+{{ if ne .wm "sway" }}
+.config/sway
+.config/waybar
+.config/swaylock
+.config/swayidle
+.config/fuzzel
+{{ end }}
+
+{{- /* Laptop-only files (lid handler, polybar battery scripts) */}}
+{{ if ne .chassis "laptop" }}
+i3-related/scripts/lid-display.sh
+i3-related/lid/lid-handler.sh
+.config/polybar/battery_percent.sh
+.config/polybar/battery_status.sh
+.config/polybar/battery_watch.sh
+{{ end }}

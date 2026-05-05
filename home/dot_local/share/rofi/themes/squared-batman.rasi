@@ -1,0 +1,173 @@
+/* ROFI SQUARED "BATMAN" THEME (based on squared-nord.rasi) */
+/* Palette source: Batman.toml (mbadolato/iTerm2-Color-Schemes) */
+
+* {
+    font: "FiraCode Nerd Font Medium 12";
+
+    /* --- Batman palette --- */
+    bg0:        #1b1d1e; /* background */
+    bg1:        #505354; /* brights[0] */
+    bg2:        #4d504c; /* selection_bg */
+
+    fg0:        #dadbd6; /* brights[7] (primary text) */
+    fg1:        #6f6f6f; /* foreground (secondary text) */
+
+    accent:     #d9c700; /* cursor_bg */
+    urgent:     #e6dc44; /* ansi[1] */
+
+    /* --- global defaults --- */
+    background-color: transparent;
+    text-color:       @fg0;
+
+    margin:  0;
+    padding: 0;
+    spacing: 0;
+}
+
+configuration {
+    show-icons: true;
+    /* icon-theme: "Papirus"; */
+}
+
+window {
+    location: center;
+    width:    520;
+
+    padding:  14px;
+    border:   2px;
+
+    border-color:     @accent;
+    border-radius:    16px;
+
+    /* 8-digit hex = #RRGGBBAA (AA = alpha) */
+    background-color: #1b1d1ee6;
+}
+
+mainbox {
+    spacing: 12px;
+}
+
+inputbar {
+    spacing: 10px;
+    padding: 10px 12px;
+
+    border:        1px;
+    border-radius: 12px;
+    border-color:  #dadbd633;
+
+    background-color: #505354cc;
+    text-color:       @fg0;
+
+    children: [ prompt, entry ];
+}
+
+prompt, entry, element-icon, element-text {
+    vertical-align: 0.5;
+}
+
+prompt {
+    padding: 0 10px 0 6px;
+    text-color: @accent;
+}
+
+entry {
+    padding: 0;
+    placeholder: "Search...";
+    placeholder-color: @fg1;
+}
+
+textbox {
+    padding: 10px 12px;
+
+    border:        1px;
+    border-radius: 12px;
+    border-color:  #dadbd633;
+
+    background-color: #50535466;
+    text-color:       @fg1;
+}
+
+listview {
+    padding: 6px 0;
+    lines:   9;
+    columns: 1;
+
+    fixed-height: false;
+    spacing: 2px;
+    scrollbar: true;
+}
+
+scrollbar {
+    width: 6px;
+    handle-width: 6px;
+    padding: 0;
+
+    border-radius: 8px;
+    background-color: #50535455;
+    handle-color:     #dadbd666;
+}
+
+/* --- rows --- */
+element {
+    padding: 10px 12px;
+    spacing: 10px;
+
+    border-radius: 12px;
+}
+
+element normal normal {
+    text-color: @fg0;
+}
+
+element alternate normal {
+    background-color: #50535426;
+    text-color:       @fg0;
+}
+
+element normal active,
+element alternate active {
+    text-color: @accent;
+}
+
+element normal urgent,
+element alternate urgent {
+    text-color: @urgent;
+}
+
+element selected {
+    background-color: @accent;
+    text-color:       #000000;
+}
+
+element selected urgent {
+    background-color: @urgent;
+    text-color:       #000000;
+}
+
+element-icon {
+    size: 1.0em;
+}
+
+element-text {
+    text-color: inherit;
+}
+
+/* --- "fancy" highlights --- */
+
+/* subtle inner divider between input and list */
+message {
+    margin: 8px 0 0 0;
+
+    padding: 0;
+    border: 0;
+    text-color: @fg1;
+}
+
+error-message {
+    padding: 10px 12px;
+    border: 1px;
+    border-radius: 12px;
+    border-color: #e6dc44aa;
+    background-color: #4d504c66;
+    text-color: #fff78e;
+}

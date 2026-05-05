@@ -1,0 +1,112 @@
+{
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "cmake.showOptionsMovedNotification": false,
+    "explorer.confirmPasteNative": false,
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "editor.detectIndentation": false,
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "arduino.useArduinoCli": true,
+    "arduino.additionalUrls": [
+        "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
+    ],
+    "pvsStudio.cmakeProjectsAnalyzer.path": "",
+    "sonarlint.connectedMode.connections.sonarqube": [
+        {
+            "connectionId": "MyCompanySonarQube",
+            "serverUrl": "http://172.16.170.7:9000/",
+            "disableNotifications": false
+        },
+        {
+            "serverUrl": "http://172.16.170.7:9000",
+            "connectionId": "http-172-16-170-7-9000-"
+        }
+    ],
+    "sonarlint.focusOnNewCode": true,
+    "editor.lineNumbers": "relative",
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+    "editor.formatOnSave": true,
+    "settingsSync.keybindingsPerPlatform": false,
+    "clangd.path": "/home/pichugin-nikita/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/20.1.8/clangd_20.1.8/bin/clangd",
+    "[c]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "extensions.ignoreRecommendations": true,
+    "[dockerfile]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-containers"
+    },
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "python.analysis.typeCheckingMode": "standard",
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "clangd.checkUpdates": true,
+    "clangd.arguments": [
+        "-j=8"
+    ],
+    "aceJump.finder.pattern": "[& ,-.{_(\"'<\\[\t]",
+    "cSpell.userWords": [
+        "clbk",
+        "nlohmann",
+        "rclcpp",
+        "Rtcp",
+        "stms"
+    ],
+    "window.zoomLevel": -0.80,
+    "workbench.colorTheme": "BatmanDark Theme",
+    "workbench.colorCustomizations": {
+        "terminal.foreground": "#6f6f6f",
+        "terminal.background": "#1b1d1e",
+        "terminal.ansiBlack": "#1b1d1e",
+        "terminal.ansiBlue": "#737174",
+        "terminal.ansiCyan": "#62605f",
+        "terminal.ansiGreen": "#c8be46",
+        "terminal.ansiMagenta": "#747271",
+        "terminal.ansiRed": "#e6dc44",
+        "terminal.ansiWhite": "#c6c5bf",
+        "terminal.ansiYellow": "#f4fd22",
+        "terminal.ansiBrightBlack": "#505354",
+        "terminal.ansiBrightBlue": "#919495",
+        "terminal.ansiBrightCyan": "#a3a3a6",
+        "terminal.ansiBrightGreen": "#fff27d",
+        "terminal.ansiBrightMagenta": "#9a9a9d",
+        "terminal.ansiBrightRed": "#fff78e",
+        "terminal.ansiBrightWhite": "#dadbd6",
+        "terminal.ansiBrightYellow": "#feed6c",
+        "terminal.selectionBackground": "#4d504c",
+        "terminalCursor.background": "#000000",
+        "terminalCursor.foreground": "#fcef0c"
+    },
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    "remote.SSH.serverInstallPath": {
+        "orin-ubuntu": "/mnt/nvme/vscode.d",
+        "orin-yocto": "/mnt/data/vscode.d"
+    },
+    "workbench.startupEditor": "none",
+    "workbench.fontFamily": "Noto Sans",
+    "editor.fontFamily": "DejaVu Sans Mono",
+    "editor.fontSize": 14,
+    "editor.fontLigatures": true,
+    "chat.viewSessions.orientation": "stacked",
+    "files.simpleDialog.enable": true,
+    "chat.disableAIFeatures": true,
+    "window.dialogStyle": "custom",
+    "python.defaultInterpreterPath": "/bin/python",
+    "python.analysis.extraPaths": [
+        "reqs/Qwen3-VL-Embedding"
+    ],
+    "claudeCode.selectedModel": "opus",
+    // "http.proxy": "http://127.0.0.1:12334",
+    // "http.proxySupport": "override",
+    // "http.noProxy": "",
+    // "http.systemCertificates": true,
+    "claudeCode.preferredLocation": "sidebar",
+    "claudeCode.hideOnboarding": true,
+    "claudeCode.initialPermissionMode": "plan"
+}
