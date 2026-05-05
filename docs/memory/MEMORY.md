@@ -1,0 +1,4 @@
+- [User role and machines](user.md) — Nikita, embedded systems engineer, laptop + EVO-X2 desktop
+- [Collaboration preferences](feedback_collaboration.md) — sudo handling, history preservation, terseness
+- [my_configs dotfiles strategy](project_my_configs.md) — chezmoi-based, wm/chassis fork, sway on roadmap
+- [External systems](reference_external_systems.md) — SonarQube and Jetson Orin SSH targets

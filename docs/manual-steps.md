@@ -103,7 +103,18 @@ sh -c "$(curl -fsLS https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 chsh -s /usr/bin/zsh
 ```
 
-## 9. Set chezmoi data correctly on each machine
+## 9. Wire up Claude Code memory (optional)
+
+The repo carries persistent Claude Code memory in `docs/memory/`. To make Claude Code on this machine read from there:
+
+```bash
+mkdir -p ~/.claude/projects/-home-ironyoid
+ln -sfn ~/.local/share/chezmoi/docs/memory ~/.claude/projects/-home-ironyoid/memory
+```
+
+See `docs/memory/README.md` for details.
+
+## 10. Set chezmoi data correctly on each machine
 
 `chezmoi init` prompts the first time. To re-prompt or change values later, edit `~/.config/chezmoi/chezmoi.toml` directly. Reference values:
 
